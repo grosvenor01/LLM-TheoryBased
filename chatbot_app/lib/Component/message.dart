@@ -4,29 +4,73 @@ import 'package:flutter/material.dart';
 class message extends StatelessWidget {
   final content;
   final type;
-  const message({
-    required this.content,
-    required this.type,
-    super.key
-  });
+  const message({required this.content, required this.type, super.key});
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      padding: EdgeInsets.all(10),
-      
-      margin: type == "recieve" ? EdgeInsets.only(right: screenWidth*0.1 , top:10) : EdgeInsets.only(left: screenWidth*0.1,top: 10),
-      width: screenWidth*0.85,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: type == "recieve" ? const Color.fromARGB(255, 75, 75, 75) : const Color.fromARGB(139, 16, 0, 156)
-      ),
-      child: const Text(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        style: TextStyle(
-          color: Colors.white
-        ),
-      ),
-    );
+    if(type == "recieve"){
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Container(
+            height: screenWidth*0.1,
+            width: screenWidth*0.1,
+            
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+              image: DecorationImage(image: AssetImage("image.png") , fit: BoxFit.fill)
+            ),
+          ),
+          const SizedBox(width: 5),
+          Container(
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.only(top: 10),
+            width: screenWidth * 0.8,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color:const Color.fromARGB(255, 75, 75, 75),
+            ),
+            child: Text(
+              content,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+          SizedBox(width: screenWidth * 0.05,),
+        ],
+      );
+    }
+    else{
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          SizedBox(width: screenWidth*0.05,),
+          Container(
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.only(top: 10),
+            width: screenWidth * 0.8,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: const Color.fromARGB(139, 16, 0, 156)),
+            child: Text(
+              content,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+          SizedBox(width: 5,),
+          Container(
+            height: screenWidth*0.1,
+            width: screenWidth*0.1,
+            
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+              image: DecorationImage(image: AssetImage("image2.png") , fit: BoxFit.fill)
+            ),
+          ),
+        ],
+      );
+    }
+    
   }
 }

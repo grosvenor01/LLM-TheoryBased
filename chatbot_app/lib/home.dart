@@ -1,4 +1,3 @@
-import 'package:chatbot/Component/icone.dart';
 import 'package:chatbot/Component/message.dart';
 import 'package:flutter/material.dart';
 
@@ -14,75 +13,89 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xFF1A1A1A), // Dark background color
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        actions:  const [
-          SizedBox(width: 20,),
-          Text("Revo Bot",
+        backgroundColor: Color(0xFF2C2C2C), // Slightly lighter AppBar
+        title: const Text(
+          "Revo Bot",
           style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-            fontFamily: "Poppins",
-            fontWeight: FontWeight.bold
-          ),),
-          Spacer(),
-        ],
+              color: Colors.white,
+              fontSize: 25,
+              fontFamily: "Poppins",
+              fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
       ),
-    body:Column(
-      children: [
-        Container(
-          height: screenHeight *0.77,
-          width: screenWidth,
-          child: SingleChildScrollView(
-            child: Column(
+      body: Column(
+        children: [
+          const Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  message(content: "Hello! How can I assist you today?",type: "recieve"),
+                  SizedBox(width: 10,),
+                  message(content: "I need help with my order.", type: "send"),
+                  SizedBox(width: 10,),
+                  message(content: "Sure! Can you provide your order number?",type: "recieve"),
+                  SizedBox(width: 10,),
+                  message(content: "It's 12345.", type: "send"),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            child: Row(
               children: [
-                message(content: "idk", type: "recieve"),
-                message(content: "idk", type: "send"),
-                message(content: "idk", type: "recieve"),
-                message(content: "idk", type: "send"),
-                SizedBox(height: 20,)
+                Container(
+                  width: screenWidth*0.8, // Full width for the input field
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF2C2C2C), // Background color for input
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: Colors.grey.shade600),
+                  ),
+                  constraints: const BoxConstraints(
+                    maxHeight: 100, // Set a max height
+                  ),
+                  child: TextField(
+                    onChanged: (value) {
+                      print(value);
+                    },
+                    textAlign: TextAlign.left,
+                    cursorColor: Colors.white,
+                    decoration: InputDecoration(
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      hintText: "Write here your question",
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                    ),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    // Implement send action
+                    print("Send message");
+                  },
+                  icon: Icon(Icons.send),
+                  color: Colors.blueAccent,
+                  iconSize: 30,
+                  padding: EdgeInsets.only(left: 10),
+                ),
               ],
             ),
           ),
-        ),
-        
-        Row(
-          children: [
-            const messageType(iconName: Icons.mic),
-            const SizedBox(width: 10,),
-            const messageType(iconName: Icons.file_open_rounded),
-            const SizedBox(width: 10,),
-            Container(
-              width: screenWidth - (screenWidth*0.12*2+20+10),
-              height: 50,
-              padding: EdgeInsets.only(left: 7,right: 7),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey,
-                ),
-                borderRadius: BorderRadius.circular(30)
-              ),
-              child: const TextField(
-                textAlign: TextAlign.left,
-                cursorColor: Colors.white,
-                decoration: InputDecoration(
-                  enabledBorder: InputBorder.none,
-                  border:InputBorder.none,
-                  hintText: "Wirte here you question"
-                ),
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15,
-                  fontWeight: FontWeight.normal
-                ),
-              ),
-            )
-          ],
-        )
-      ],
-    ),
+        ],
+      ),
     );
   }
 }
