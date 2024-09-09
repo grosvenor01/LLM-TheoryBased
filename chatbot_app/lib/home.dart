@@ -1,5 +1,7 @@
 import 'package:chatbot/Component/message.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -8,12 +10,36 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+class messageT {
+  var content;
+  var messageType;
+  messageT(this.content, this.messageType);
+}
+
 class _HomeState extends State<Home> {
+  var response;
+  var question = "";
+  List messages = [];
+  Future<void> botcall() async {
+    const url = "http://localhost:8000";
+    response = await http.post(Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "content": question,
+        }));
+    final data = json.decode(response.body);
+    question = "";
+    print(data);
+    messages.add(messageT(data["output"], "recieve"));
+    setState(() {
+      
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Color(0xFF1A1A1A), // Dark background color
       appBar: AppBar(
@@ -30,18 +56,20 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: [
-          const Expanded(
+          Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  message(content: "Hello! How can I assist you today?",type: "recieve"),
-                  SizedBox(width: 10,),
-                  message(content: "I need help with my order.", type: "send"),
-                  SizedBox(width: 10,),
-                  message(content: "Sure! Can you provide your order number?",type: "recieve"),
-                  SizedBox(width: 10,),
-                  message(content: "It's 12345.", type: "send"),
-                  SizedBox(height: 20),
+                    for (var i = 0; i < messages.length;i++)
+                      message(
+                          content:  messages[i].content,
+                          type: messages[i].messageType),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
                 ],
               ),
             ),
@@ -51,7 +79,7 @@ class _HomeState extends State<Home> {
             child: Row(
               children: [
                 Container(
-                  width: screenWidth*0.8, // Full width for the input field
+                  width: screenWidth * 0.8, // Full width for the input field
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     color: Color(0xFF2C2C2C), // Background color for input
@@ -63,7 +91,9 @@ class _HomeState extends State<Home> {
                   ),
                   child: TextField(
                     onChanged: (value) {
-                      print(value);
+                      setState(() {
+                        question = value;
+                      });
                     },
                     textAlign: TextAlign.left,
                     cursorColor: Colors.white,
@@ -83,8 +113,11 @@ class _HomeState extends State<Home> {
                 ),
                 IconButton(
                   onPressed: () {
-                    // Implement send action
-                    print("Send message");
+                    messages.add(messageT(question, "send"));
+                    setState(() {
+                      
+                    });
+                    botcall();
                   },
                   icon: Icon(Icons.send),
                   color: Colors.blueAccent,
